@@ -45,6 +45,14 @@ defmodule MaxoSql.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
+      {:maxo_adapt, "~> 0.1"},
+
+      # DB drivers
+      {:postgrex, "~> 0.17", optional: true},
+      {:myxql, "~> 0.6.3", optional: true},
+      {:exqlite, "~> 0.13", optional: true},
+
+      # Dev tools
       {:ex_doc, "~> 0.29", only: :dev, runtime: false},
       {:maxo_test_iex, "~> 0.1", only: [:test]},
       {:mneme, "~> 0.3", only: [:test]}
