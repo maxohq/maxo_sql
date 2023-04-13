@@ -1,10 +1,16 @@
 defmodule MaxoSql.Driver.Mysql do
   alias MaxoSql.Config
   alias MaxoSql.ResultMapper
+  alias MaxoSql.Util
 
   def start do
     ensure_started()
     MyXQL.start_link(Config.mysql_params())
+  end
+
+  def start(url) when is_binary(url) do
+    ensure_started()
+    MyXQL.start_link(Util.url_to_params(url))
   end
 
   def query!(pid, sql, opts \\ []) do
