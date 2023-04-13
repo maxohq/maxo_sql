@@ -13,5 +13,5 @@ defmodule MaxoSql.Result do
             messages: [],
             ## mysql
             last_insert_id: nil,
-            num_warnings: nil
+            num_warnings: 0
 end

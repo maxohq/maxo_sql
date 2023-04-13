@@ -17,10 +17,10 @@ defimpl MaxoSql.ResultMapper, for: Postgrex.Result do
       type: :psql,
       command: res.command,
       columns: res.columns,
-      messages: res.messages,
       rows: res.rows,
       num_rows: res.num_rows,
-      connection_id: res.connection_id
+      connection_id: res.connection_id,
+      messages: res.messages
     }
   end
 end
@@ -38,11 +38,24 @@ defimpl MaxoSql.ResultMapper, for: MyXQL.Result do
     %MaxoSql.Result{
       type: :mysql,
       columns: res.columns,
-      messages: [],
+      connection_id: res.connection_id,
       last_insert_id: res.last_insert_id,
-      rows: res.rows,
       num_rows: res.num_rows,
-      connection_id: res.connection_id
+      rows: res.rows,
+      num_warnings: res.num_warnings
+    }
+  end
+end
+
+defimpl MaxoSql.ResultMapper, for: Exqlite.Result do
+  # %Exqlite.Result{command: :execute, columns: ["1"], rows: [[1]], num_rows: 1}
+  def map(%Exqlite.Result{} = res) do
+    %MaxoSql.Result{
+      type: :sqlite,
+      command: res.command,
+      columns: res.columns,
+      num_rows: res.num_rows,
+      rows: res.rows
     }
   end
 end
