@@ -11,7 +11,7 @@ defmodule MaxoSql.Result do
             # psql
             command: nil,
             messages: [],
-            ## mysql
+            # mysql
             last_insert_id: nil,
             num_warnings: 0
 end
