@@ -16,7 +16,8 @@ defmodule MaxoSql.MixProject do
       test_pattern: "*_test.exs",
       start_permanent: Mix.env() == :prod,
       deps: deps(),
-      package: package()
+      package: package(),
+      dialyzer: dialyzer()
     ]
   end
 
@@ -42,10 +43,19 @@ defmodule MaxoSql.MixProject do
     ]
   end
 
+  defp dialyzer do
+    [
+      plt_add_apps: [:postgrex, :myxql, :exqlite],
+      # flags: [:unmatched_returns, :error_handling, :no_opaque]
+      flags: [:error_handling, :no_opaque]
+    ]
+  end
+
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
       {:maxo_adapt, "~> 0.1"},
+      {:jason, "~> 1.4"},
 
       # DB drivers
       {:postgrex, "~> 0.17", optional: true},
@@ -53,6 +63,7 @@ defmodule MaxoSql.MixProject do
       {:exqlite, "~> 0.13", optional: true},
 
       # Dev tools
+      {:dialyxir, "~> 1.3", only: :dev, runtime: false},
       {:ex_doc, "~> 0.29", only: :dev, runtime: false},
       {:maxo_test_iex, "~> 0.1", only: [:test]},
       {:mneme, "~> 0.3", only: [:test]}
