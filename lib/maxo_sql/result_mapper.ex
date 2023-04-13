@@ -4,14 +4,6 @@ defprotocol MaxoSql.ResultMapper do
 end
 
 defimpl MaxoSql.ResultMapper, for: Postgrex.Result do
-  # %Postgrex.Result{
-  #   command: :select,
-  #   columns: ["?column?"],
-  #   rows: [[1]],
-  #   num_rows: 1,
-  #   connection_id: 126,
-  #   messages: []
-  # }
   def map(%Postgrex.Result{} = res) do
     %MaxoSql.Result{
       type: :psql,
@@ -26,14 +18,6 @@ defimpl MaxoSql.ResultMapper, for: Postgrex.Result do
 end
 
 defimpl MaxoSql.ResultMapper, for: MyXQL.Result do
-  # %MyXQL.Result{
-  #   columns: ["1"],
-  #   connection_id: 46,
-  #   last_insert_id: nil,
-  #   num_rows: 1,
-  #   rows: [[1]],
-  #   num_warnings: 0
-  # }
   def map(%MyXQL.Result{} = res) do
     %MaxoSql.Result{
       type: :mysql,
@@ -48,7 +32,6 @@ defimpl MaxoSql.ResultMapper, for: MyXQL.Result do
 end
 
 defimpl MaxoSql.ResultMapper, for: Exqlite.Result do
-  # %Exqlite.Result{command: :execute, columns: ["1"], rows: [[1]], num_rows: 1}
   def map(%Exqlite.Result{} = res) do
     %MaxoSql.Result{
       type: :sqlite,
