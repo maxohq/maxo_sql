@@ -17,6 +17,29 @@ jobs:
       matrix:
         otp: ["25.0.4"]
         elixir: ["1.14.2"]
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_DB: maxo_sql
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+
+        ports:
+          - "5551:5432"
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 1s
+          --health-timeout 1s
+          --health-retries 30
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_DATABASE: maxo_sql
+          MYSQL_ROOT_PASSWORD: mysql
+
+        ports:
+          - "5552:3306"
 
     steps:
       - name: Set up Elixir
@@ -26,27 +49,27 @@ jobs:
           elixir-version: ${{matrix.elixir}}
       - name: Checkout code
         uses: actions/checkout@v3
-      # - name: Cache deps
-      #   id: cache-deps
-      #   uses: actions/cache@v3
-      #   env:
-      #     cache-name: cache-elixir-deps
-      #   with:
-      #     path: deps
-      #     key: ${{ runner.os }}-mix-${{ env.cache-name }}-${{ hashFiles('**/mix.lock') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-mix-${{ env.cache-name }}-
-      # - name: Cache compiled build
-      #   id: cache-build
-      #   uses: actions/cache@v3
-      #   env:
-      #     cache-name: cache-compiled-build
-      #   with:
-      #     path: _build
-      #     key: ${{ runner.os }}-mix-${{ env.cache-name }}-${{ hashFiles('**/mix.lock') }}
-      #     restore-keys: |
-      #       ${{ runner.os }}-mix-${{ env.cache-name }}-
-      #       ${{ runner.os }}-mix-
+      - name: Cache deps
+        id: cache-deps
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-elixir-deps
+        with:
+          path: deps
+          key: ${{ runner.os }}-mix-${{ env.cache-name }}-${{ hashFiles('**/mix.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-mix-${{ env.cache-name }}-
+      - name: Cache compiled build
+        id: cache-build
+        uses: actions/cache@v3
+        env:
+          cache-name: cache-compiled-build
+        with:
+          path: _build
+          key: ${{ runner.os }}-mix-${{ env.cache-name }}-${{ hashFiles('**/mix.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-mix-${{ env.cache-name }}-
+            ${{ runner.os }}-mix-
       # - run: rm -rf _build
       # - run: rm -rf deps
       - run: mix deps.get
