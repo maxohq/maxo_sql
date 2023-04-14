@@ -54,7 +54,7 @@ defmodule PerformanceTest do
 
     Benchee.run(%{
       "big select (hardcoded)" => gen_fn.(selects(120)),
-      # "big select (hardcoded) v2" => gen_fn.(gen_query()),
+      "big select (hardcoded) v2" => gen_fn.(gen_query()),
       "small query" => gen_fn.(selects(2)),
       "big joins via select field" => gen_fn.(join_selects(60)),
       "med joins via select field" => gen_fn.(join_selects(20)),
