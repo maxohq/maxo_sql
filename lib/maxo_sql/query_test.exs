@@ -4,103 +4,103 @@ defmodule MaxoSql.QueryTest do
   import MaxoSql.Query
 
   test "select returns MaxoSql containing :select option (passing a string)" do
-    query_dust = select("id")
+    query = select("id")
 
-    assert query_dust == %MaxoSql{
+    assert query == %MaxoSql{
              select: ["id"]
            }
   end
 
-  test "select returns SqlDust containing :select option (passing a list)" do
-    query_dust = select(["id"])
+  test "select returns MaxoSql containing :select option (passing a list)" do
+    query = select(["id"])
 
-    assert query_dust == %MaxoSql{
+    assert query == %MaxoSql{
              select: ["id"]
            }
   end
 
   test "select appends an argument to existing :select option (passing a string)" do
-    query_dust =
+    query =
       select("id")
       |> select("name")
 
-    assert query_dust == %MaxoSql{
+    assert query == %MaxoSql{
              select: ["id", "name"]
            }
   end
 
   test "select appends an argument to existing :select option (passing a list)" do
-    query_dust =
+    query =
       select("id")
       |> select(~w(name))
 
-    assert query_dust == %MaxoSql{
+    assert query == %MaxoSql{
              select: ["id", "name"]
            }
   end
 
   test "passing a string to imply the :from option" do
-    query_dust =
+    query =
       "users"
       |> select("id")
 
-    assert query_dust == %MaxoSql{
+    assert query == %MaxoSql{
              select: ["id"],
              from: "users"
            }
   end
 
-  test "from returns SqlDust containing :from option" do
-    query_dust = from("users")
+  test "from returns MaxoSql containing :from option" do
+    query = from("users")
 
-    assert query_dust == %MaxoSql{
+    assert query == %MaxoSql{
              from: "users"
            }
   end
 
-  test "from sets :from option of passed SqlDust" do
-    query_dust =
+  test "from sets :from option of passed MaxoSql" do
+    query =
       select("id")
       |> from("users")
 
-    assert query_dust == %MaxoSql{
+    assert query == %MaxoSql{
              select: ["id"],
              from: "users"
            }
   end
 
-  test "where returns SqlDust containing :where option (passing a string)" do
-    query_dust = where("company.name LIKE '%Engel%'")
+  test "where returns MaxoSql containing :where option (passing a string)" do
+    query = where("company.name LIKE '%Engel%'")
 
-    assert query_dust == %MaxoSql{
+    assert query == %MaxoSql{
              where: ["company.name LIKE '%Engel%'"]
            }
   end
 
-  test "where returns SqlDust containing :where option (passing a list)" do
-    query_dust = where(["company.name LIKE '%Engel%'"])
+  test "where returns MaxoSql containing :where option (passing a list)" do
+    query = where(["company.name LIKE '%Engel%'"])
 
-    assert query_dust == %MaxoSql{
+    assert query == %MaxoSql{
              where: [["company.name LIKE '%Engel%'"]]
            }
   end
 
   test "where appends an argument to existing :where option (passing a string)" do
-    query_dust =
+    query =
       where("company.name LIKE '%Engel%'")
       |> where("category_id = 1")
 
-    assert query_dust == %MaxoSql{
+    assert query == %MaxoSql{
              where: ["company.name LIKE '%Engel%'", "category_id = 1"]
            }
   end
 
   test "where appends an argument to existing :where option (passing a list)" do
-    query_dust =
+    query =
       where(["company.name LIKE ?", "%Engel%"])
       |> where(["category_id = ?", 1])
 
-    assert query_dust == %MaxoSql{
+    assert query == %MaxoSql{
              where: [
                ["company.name LIKE ?", "%Engel%"],
                ["category_id = ?", 1]
@@ -108,245 +108,245 @@ defmodule MaxoSql.QueryTest do
            }
   end
 
-  test "variables returns SqlDust containing :variables option" do
-    query_dust = variables(%{id: 1982})
+  test "variables returns MaxoSql containing :variables option" do
+    query = variables(%{id: 1982})
 
-    assert query_dust == %MaxoSql{
+    assert query == %MaxoSql{
              variables: %{id: 1982}
            }
   end
 
   test "variables merges an argument to existing :variables option" do
-    query_dust =
+    query =
       variables(%{id: 1982})
       |> variables(%{name: "Paul Engel"})
 
-    assert query_dust == %MaxoSql{
+    assert query == %MaxoSql{
              variables: %{id: 1982, name: "Paul Engel"}
            }
   end
 
-  test "group_by returns SqlDust containing :group_by option (passing a string)" do
-    query_dust = group_by("company_id")
+  test "group_by returns MaxoSql containing :group_by option (passing a string)" do
+    query = group_by("company_id")
 
-    assert query_dust == %MaxoSql{
+    assert query == %MaxoSql{
              group_by: ["company_id"]
            }
   end
 
-  test "group_by returns SqlDust containing :group_by option (passing a list)" do
-    query_dust = group_by(["company_id"])
+  test "group_by returns MaxoSql containing :group_by option (passing a list)" do
+    query = group_by(["company_id"])
 
-    assert query_dust == %MaxoSql{
+    assert query == %MaxoSql{
              group_by: ["company_id"]
            }
   end
 
   test "group_by appends an argument to existing :group_by option (passing a string)" do
-    query_dust =
+    query =
       group_by("company_id")
       |> group_by("category_id")
 
-    assert query_dust == %MaxoSql{
+    assert query == %MaxoSql{
              group_by: ["company_id", "category_id"]
            }
   end
 
   test "group_by appends an argument to existing :group_by option (passing a list)" do
-    query_dust =
+    query =
       group_by("company_id")
       |> group_by(~w(category_id))
 
-    assert query_dust == %MaxoSql{
+    assert query == %MaxoSql{
              group_by: ["company_id", "category_id"]
            }
   end
 
-  test "order_by returns SqlDust containing :order_by option (passing a string)" do
-    query_dust = order_by("company_id")
+  test "order_by returns MaxoSql containing :order_by option (passing a string)" do
+    query = order_by("company_id")
 
-    assert query_dust == %MaxoSql{
+    assert query == %MaxoSql{
              order_by: ["company_id"]
            }
   end
 
-  test "order_by returns SqlDust containing :order_by option (passing a list)" do
-    query_dust = order_by(["company_id"])
+  test "order_by returns MaxoSql containing :order_by option (passing a list)" do
+    query = order_by(["company_id"])
 
-    assert query_dust == %MaxoSql{
+    assert query == %MaxoSql{
              order_by: ["company_id"]
            }
   end
 
   test "order_by appends an argument to existing :order_by option (passing a string)" do
-    query_dust =
+    query =
       order_by("company_id")
       |> order_by("category_id")
 
-    assert query_dust == %MaxoSql{
+    assert query == %MaxoSql{
              order_by: ["company_id", "category_id"]
            }
   end
 
   test "order_by appends an argument to existing :order_by option (passing a list)" do
-    query_dust =
+    query =
       order_by("company_id")
       |> order_by(~w(category_id))
 
-    assert query_dust == %MaxoSql{
+    assert query == %MaxoSql{
              order_by: ["company_id", "category_id"]
            }
   end
 
-  test "limit returns SqlDust containing :limit option" do
-    query_dust = limit(10)
+  test "limit returns MaxoSql containing :limit option" do
+    query = limit(10)
 
-    assert query_dust == %MaxoSql{
+    assert query == %MaxoSql{
              limit: 10
            }
   end
 
-  test "limit sets :limit option of passed SqlDust" do
-    query_dust =
+  test "limit sets :limit option of passed MaxoSql" do
+    query =
       select("id")
       |> limit(10)
 
-    assert query_dust == %MaxoSql{
+    assert query == %MaxoSql{
              select: ["id"],
              limit: 10
            }
   end
 
   test "limit defaults to '?'" do
-    query_dust =
+    query =
       select("id")
       |> limit
 
-    assert query_dust == %MaxoSql{
+    assert query == %MaxoSql{
              select: ["id"],
              limit: "?"
            }
   end
 
-  test "limit overwrites :limit option within passed SqlDust" do
-    query_dust =
+  test "limit overwrites :limit option within passed MaxoSql" do
+    query =
       select("id")
       |> limit(10)
       |> limit(100)
 
-    assert query_dust == %MaxoSql{
+    assert query == %MaxoSql{
              select: ["id"],
              limit: 100
            }
   end
 
-  test "limit default overwrites :limit option within passed SqlDust" do
-    query_dust =
+  test "limit default overwrites :limit option within passed MaxoSql" do
+    query =
       select("id")
       |> limit(10)
       |> limit
 
-    assert query_dust == %MaxoSql{
+    assert query == %MaxoSql{
              select: ["id"],
              limit: "?"
            }
   end
 
-  test "offset returns SqlDust containing :offset option" do
-    query_dust = offset(10)
+  test "offset returns MaxoSql containing :offset option" do
+    query = offset(10)
 
-    assert query_dust == %MaxoSql{
+    assert query == %MaxoSql{
              offset: 10
            }
   end
 
-  test "offset sets :offset option of passed SqlDust" do
-    query_dust =
+  test "offset sets :offset option of passed MaxoSql" do
+    query =
       select("id")
       |> offset(10)
 
-    assert query_dust == %MaxoSql{
+    assert query == %MaxoSql{
              select: ["id"],
              offset: 10
            }
   end
 
-  test "offset overwrites :offset option within passed SqlDust" do
-    query_dust =
+  test "offset overwrites :offset option within passed MaxoSql" do
+    query =
       select("id")
       |> offset(10)
       |> offset(100)
 
-    assert query_dust == %MaxoSql{
+    assert query == %MaxoSql{
              select: ["id"],
              offset: 100
            }
   end
 
   test "offset defaults to '?'" do
-    query_dust =
+    query =
       select("id")
       |> offset
 
-    assert query_dust == %MaxoSql{
+    assert query == %MaxoSql{
              select: ["id"],
              offset: "?"
            }
   end
 
-  test "offset default overwrites :offset option within passed SqlDust" do
-    query_dust =
+  test "offset default overwrites :offset option within passed MaxoSql" do
+    query =
       select("id")
       |> offset(10)
       |> offset
 
-    assert query_dust == %MaxoSql{
+    assert query == %MaxoSql{
              select: ["id"],
              offset: "?"
            }
   end
 
-  test "unique returns SqlDust containing :unique option (at default true)" do
-    query_dust = unique()
+  test "unique returns MaxoSql containing :unique option (at default true)" do
+    query = unique()
 
-    assert query_dust == %MaxoSql{
+    assert query == %MaxoSql{
              unique: true
            }
   end
 
-  test "unique returns SqlDust containing :unique option" do
-    query_dust = unique(false)
+  test "unique returns MaxoSql containing :unique option" do
+    query = unique(false)
 
-    assert query_dust == %MaxoSql{
+    assert query == %MaxoSql{
              unique: false
            }
   end
 
-  test "unique sets :unique option of passed SqlDust" do
-    query_dust =
+  test "unique sets :unique option of passed MaxoSql" do
+    query =
       select("id")
       |> unique(true)
 
-    assert query_dust == %MaxoSql{
+    assert query == %MaxoSql{
              select: ["id"],
              unique: true
            }
   end
 
-  test "unique overwrites :unique option within passed SqlDust" do
-    query_dust =
+  test "unique overwrites :unique option within passed MaxoSql" do
+    query =
       select("id")
       |> unique(true)
       |> unique(false)
 
-    assert query_dust == %MaxoSql{
+    assert query == %MaxoSql{
              select: ["id"],
              unique: false
            }
   end
 
-  test "schema returns SqlDust containing :schema option" do
-    query_dust =
+  test "schema returns MaxoSql containing :schema option" do
+    query =
       schema(%{
         users: %{
           skills: %{
@@ -355,7 +355,7 @@ defmodule MaxoSql.QueryTest do
         }
       })
 
-    assert query_dust == %MaxoSql{
+    assert query == %MaxoSql{
              schema: %{
                users: %{
                  skills: %{
@@ -367,7 +367,7 @@ defmodule MaxoSql.QueryTest do
   end
 
   test "schema merges argument to existing :schema option" do
-    query_dust =
+    query =
       schema(%{
         users: %{
           skills: %{
@@ -386,7 +386,7 @@ defmodule MaxoSql.QueryTest do
         }
       })
 
-    assert query_dust == %MaxoSql{
+    assert query == %MaxoSql{
              schema: %{
                users: %{
                  skills: %{

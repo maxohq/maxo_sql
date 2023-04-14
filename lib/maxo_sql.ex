@@ -21,7 +21,7 @@ defmodule MaxoSql do
   ]
 
   @moduledoc """
-    SqlDust is a module that generates SQL queries as intuitively as possible.
+    MaxoSql is a module that generates SQL queries as intuitively as possible.
   """
   def from(resource, options \\ %{}, schema \\ %{}) do
     options =
