@@ -56,6 +56,7 @@ defmodule MaxoSql.MixProject do
     [
       {:maxo_adapt, "~> 0.1"},
       {:jason, "~> 1.4"},
+      {:inflex, "~> 2.1"},
 
       # DB drivers
       {:postgrex, "~> 0.17", optional: true},
