@@ -62,6 +62,7 @@ defmodule MaxoSql.MixProject do
       {:postgrex, "~> 0.17", optional: true},
       {:myxql, "~> 0.6.3", optional: true},
       {:exqlite, "~> 0.13", optional: true},
+      {:ecto, "~> 3.7", optional: true},
 
       # Dev tools
       {:dialyxir, "~> 1.3", only: :dev, runtime: false},
