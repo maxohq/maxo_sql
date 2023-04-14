@@ -21,6 +21,7 @@ defmodule Test do
 
     schema "countries" do
       has_many(:cities, Test.City)
+
       # has_many :weather, through: [:cities, :local_weather] ???
     end
   end
@@ -28,6 +29,7 @@ end
 
 defmodule Ecto.MaxoSqlTest do
   use ExUnit.Case
+  use MnemeDefaults
   doctest Ecto.MaxoSql
   import Ecto.MaxoSql
 
@@ -36,11 +38,12 @@ defmodule Ecto.MaxoSqlTest do
       Test.Weather
       |> to_sql
 
-    assert sql ==
-             {"""
-              SELECT "w".*
-              FROM "weather" "w"
-              """, []}
+    auto_assert(
+      {"""
+       SELECT "w".*
+       FROM "weather" "w"
+       """, []} <- sql
+    )
   end
 
   test "generates simple SQL based on Ecto model schemas (using from)" do
@@ -48,11 +51,12 @@ defmodule Ecto.MaxoSqlTest do
       from(Test.Weather)
       |> to_sql
 
-    assert sql ==
-             {"""
-              SELECT "w".*
-              FROM "weather" "w"
-              """, []}
+    auto_assert(
+      {"""
+       SELECT "w".*
+       FROM "weather" "w"
+       """, []} <- sql
+    )
   end
 
   test "generates SQL based on Ecto model schemas" do
@@ -62,19 +66,20 @@ defmodule Ecto.MaxoSqlTest do
       |> where("local_weather.wdate = '2015-09-12'")
       |> to_sql
 
-    assert sql ==
-             {"""
-              SELECT
-                "c"."id",
-                "c"."name",
-                "country"."name",
-                "local_weather"."temp_lo",
-                "local_weather"."temp_hi"
-              FROM "cities" "c"
-              LEFT JOIN "countries" "country" ON "country"."id" = "c"."country_id"
-              LEFT JOIN "weather" "local_weather" ON "local_weather"."city_id" = "c"."id"
-              WHERE ("local_weather"."wdate" = '2015-09-12')
-              """, []}
+    auto_assert(
+      {"""
+       SELECT
+         "c"."id",
+         "c"."name",
+         "country"."name",
+         "local_weather"."temp_lo",
+         "local_weather"."temp_hi"
+       FROM "cities" "c"
+       LEFT JOIN "countries" "country" ON "country"."id" = "c"."country_id"
+       LEFT JOIN "weather" "local_weather" ON "local_weather"."city_id" = "c"."id"
+       WHERE ("local_weather"."wdate" = '2015-09-12')
+       """, []} <- sql
+    )
   end
 
   test "support generating SQL based on Ecto model schemas for MySQL" do
@@ -85,18 +90,19 @@ defmodule Ecto.MaxoSqlTest do
       |> adapter(:mysql)
       |> to_sql
 
-    assert sql ==
-             {"""
-              SELECT
-                `c`.`id`,
-                `c`.`name`,
-                `country`.`name`,
-                `local_weather`.`temp_lo`,
-                `local_weather`.`temp_hi`
-              FROM `cities` `c`
-              LEFT JOIN `countries` `country` ON `country`.`id` = `c`.`country_id`
-              LEFT JOIN `weather` `local_weather` ON `local_weather`.`city_id` = `c`.`id`
-              WHERE (`local_weather`.`wdate` = ?)
-              """, ["2015-09-12"]}
+    auto_assert(
+      {"""
+       SELECT
+         `c`.`id`,
+         `c`.`name`,
+         `country`.`name`,
+         `local_weather`.`temp_lo`,
+         `local_weather`.`temp_hi`
+       FROM `cities` `c`
+       LEFT JOIN `countries` `country` ON `country`.`id` = `c`.`country_id`
+       LEFT JOIN `weather` `local_weather` ON `local_weather`.`city_id` = `c`.`id`
+       WHERE (`local_weather`.`wdate` = ?)
+       """, ["2015-09-12"]} <- sql
+    )
   end
 end
