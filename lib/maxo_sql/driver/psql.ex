@@ -11,7 +11,8 @@ if Code.ensure_loaded?(Postgrex) do
 
     def start(url) when is_binary(url) do
       ensure_started()
-      Postgrex.start_link(Util.url_to_params(url))
+      params = Util.url_to_params(url) |> IO.inspect()
+      Postgrex.start_link(params)
     end
 
     def query!(pid, sql, opts \\ []) do

@@ -8,6 +8,12 @@ if Code.ensure_loaded?(Exqlite) do
       Exqlite.start_link(Util.url_to_params(url))
     end
 
+    def query(conn, sql, opts \\ []) do
+      with {:ok, res} <- Exqlite.query(conn, sql, opts) do
+        {:ok, ResultMapper.map(res)}
+      end
+    end
+
     def query!(conn, sql, opts \\ []) do
       Exqlite.query!(conn, sql, opts) |> ResultMapper.map()
     end
