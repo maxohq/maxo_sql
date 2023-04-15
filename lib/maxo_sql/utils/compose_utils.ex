@@ -20,7 +20,7 @@ defmodule MaxoSql.Utils.ComposeUtils do
       end
 
       defp __from__(options, resource) do
-        put(options, :from, resource)
+        put(options, :from, to_string(resource))
       end
 
       def join_on(statements) do

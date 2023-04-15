@@ -54,6 +54,14 @@ defmodule MaxoSql.QueryTest do
     auto_assert(%MaxoSql{from: "users", select: ["id"]} <- query)
   end
 
+  test "from converts atoms to strings" do
+    query =
+      select("id")
+      |> from(:users)
+
+    auto_assert(%MaxoSql{from: "users", select: ["id"]} <- query)
+  end
+
   test "where returns MaxoSql containing :where option (passing a string)" do
     query = where("company.name LIKE '%Engel%'")
 
