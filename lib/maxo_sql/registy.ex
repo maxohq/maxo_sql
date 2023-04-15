@@ -18,10 +18,10 @@ defmodule MaxoSql.Repo.Registry do
   end
 
   def mylookup(repo) when is_atom(repo) do
-    res = :ets.match(__MODULE__, {:"$1", :"$2", :_, repo})
+    res = :ets.match(__MODULE__, {:"$1", :"$2", repo, :"$3"})
 
     case res do
-      [[pid, _ref]] -> pid
+      [[pid, _ref, meta]] -> {pid, meta}
       _ -> nil
     end
   end
@@ -55,7 +55,8 @@ defmodule MaxoSql.Repo.Registry do
 
   @impl true
   def handle_info({:DOWN, ref, _type, pid, _reason}, table) do
-    [{^pid, ^ref, _, _}] = :ets.lookup(table, pid)
+    [{^pid, ^ref, name, value}] = :ets.lookup(table, pid)
+    IO.puts("Repo.Registry: #{inspect(name)} is down, value: #{inspect(value)}")
     :ets.delete(table, pid)
     {:noreply, table}
   end
