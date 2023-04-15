@@ -177,10 +177,6 @@ defmodule MaxoSql.Utils.PathUtils do
     end
   end
 
-  defp cascaded_paths(path) when is_bitstring(path) do
-    cascaded_paths(String.split(path, "."))
-  end
-
   defp cascaded_paths(path) do
     path
     |> Enum.reduce([], fn
