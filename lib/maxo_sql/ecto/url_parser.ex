@@ -2,6 +2,11 @@ defmodule MaxoSql.Ecto.UrlParser do
   ## THE ECTO VERSION, see:
   # ecto/repo/supervisor.ex
   @integer_url_query_params ["timeout", "pool_size", "idle_interval"]
+  @db_types %{
+    "postgresql" => :psql,
+    "mysql" => :mysql,
+    "file" => :sqlite
+  }
 
   # url = "ecto://username:password@hostname:port/database?ssl=true&timeout=1000"
   # MaxoSql.Ecto.UrlParser.parse_url(url)
@@ -22,12 +27,15 @@ defmodule MaxoSql.Ecto.UrlParser do
     destructure [username, password], info.userinfo && String.split(info.userinfo, ":")
     "/" <> database = info.path
 
+    type = Map.get(@db_types, info.scheme, :sqlite)
+
     url_opts = [
       scheme: info.scheme,
       username: username,
       password: password,
       database: database,
-      port: info.port
+      port: info.port,
+      type: type
     ]
 
     url_opts = put_hostname_if_present(url_opts, info.host)

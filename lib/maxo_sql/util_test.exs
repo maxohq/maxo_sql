@@ -14,7 +14,8 @@ defmodule MaxoSql.UtilTest do
           hostname: "localhost",
           database: "mydb",
           port: 5432,
-          type: :psql
+          type: :psql,
+          schema: "sample"
         ] <- Util.url_to_params(url)
       )
 
@@ -27,11 +28,12 @@ defmodule MaxoSql.UtilTest do
           hostname: "localhost",
           database: "mydb",
           port: 5432,
-          type: :psql
+          type: :psql,
+          schema: "sample"
         ] <- Util.url_to_params(url)
       )
 
-      url = "postgresql://janedoe:@localhost:5555/mydb?schema=sample"
+      url = "postgresql://janedoe:@localhost:5555/mydb?schema=public"
 
       auto_assert(
         [
@@ -40,7 +42,8 @@ defmodule MaxoSql.UtilTest do
           hostname: "localhost",
           database: "mydb",
           port: 5555,
-          type: :psql
+          type: :psql,
+          schema: "public"
         ] <- Util.url_to_params(url)
       )
 
@@ -53,7 +56,8 @@ defmodule MaxoSql.UtilTest do
           hostname: "localhost",
           database: "mydb",
           port: 5555,
-          type: :psql
+          type: :psql,
+          schema: "sample"
         ] <- Util.url_to_params(url)
       )
     end
@@ -95,6 +99,28 @@ defmodule MaxoSql.UtilTest do
           database: "mydb",
           port: 3399,
           type: :mysql
+        ] <- Util.url_to_params(url)
+      )
+    end
+
+    test "parses sqlite urls" do
+      url = "file:./some.db"
+
+      auto_assert(
+        [username: "", password: "", database: "./some.db", type: :sqlite] <-
+          Util.url_to_params(url)
+      )
+
+      url = "file:blah?mode=memory&cache=shared"
+
+      auto_assert(
+        [
+          username: "",
+          password: "",
+          database: "blah",
+          type: :sqlite,
+          cache: "shared",
+          mode: "memory"
         ] <- Util.url_to_params(url)
       )
     end
