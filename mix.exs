@@ -72,7 +72,7 @@ defmodule MaxoSql.MixProject do
       {:benchee, "~> 1.1", only: :dev, runtime: false},
       {:ex_doc, "~> 0.29", only: :dev, runtime: false},
       {:maxo_test_iex, "~> 0.1.1", only: [:test]},
-      {:mneme, "~> 0.3", only: [:test]}
+      {:mneme, "~> 0.3.1", only: [:test]}
     ]
   end
 end
