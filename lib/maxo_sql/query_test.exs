@@ -402,7 +402,7 @@ defmodule MaxoSql.QueryTest do
   end
 
   test "throwing an error when generating SQL without having assigned the :from option" do
-    assert_raise RuntimeError, "missing :from option in query dust", fn ->
+    assert_raise RuntimeError, "missing :from option in query maxo_sql", fn ->
       select("id")
       |> to_sql
     end
@@ -463,7 +463,7 @@ defmodule MaxoSql.QueryTest do
            """
   end
 
-  test "generating SQL using composed query dust" do
+  test "generating SQL using composed query MaxoSql" do
     sql =
       select("id, name")
       |> select("company.name")

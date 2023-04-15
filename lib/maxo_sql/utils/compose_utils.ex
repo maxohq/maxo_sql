@@ -143,7 +143,7 @@ defmodule MaxoSql.Utils.ComposeUtils do
         options = parse(options)
 
         if is_nil(options.from) do
-          raise "missing :from option in query dust"
+          raise "missing :from option in query maxo_sql"
         end
 
         from = options.from

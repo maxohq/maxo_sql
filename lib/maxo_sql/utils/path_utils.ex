@@ -17,39 +17,39 @@ defmodule MaxoSql.Utils.PathUtils do
 
   def prepend_path_aliases(sql, options) when is_binary(sql) do
     {sql, aliases, excluded} = scan_and_format_aliases(sql, options)
-    {sql, dust_paths} = scan_and_replace_dust_paths(sql)
+    {sql, maxo_sql_path} = scan_and_replace_maxo_sql_path(sql)
     options = Map.put(options, :aliases, aliases)
 
     {sql, options} =
       sql
       |> numerize_patterns(excluded)
-      |> restore_dust_paths(dust_paths)
+      |> restore_maxo_sql_path(maxo_sql_path)
       |> scan_and_prepend_path_aliases(options)
 
     sql = interpolate_patterns(sql, excluded)
     {sql, options}
   end
 
-  defp scan_and_replace_dust_paths(sql) do
+  defp scan_and_replace_maxo_sql_path(sql) do
     path_regex = ~r/\[([\w\d\._]+)\]/i
-    dust_paths = Regex.scan(path_regex, sql) |> Enum.map(&List.first(&1))
+    maxo_sql_path = Regex.scan(path_regex, sql) |> Enum.map(&List.first(&1))
 
     {sql, _} =
-      Enum.reduce(dust_paths, {sql, 0}, fn path, {sql, index} ->
+      Enum.reduce(maxo_sql_path, {sql, 0}, fn path, {sql, index} ->
         index_str = "[#{index}]"
         {String.replace(sql, path, index_str), index + 1}
       end)
 
-    {sql, dust_paths}
+    {sql, maxo_sql_path}
   end
 
-  defp restore_dust_paths(sql, []), do: sql
+  defp restore_maxo_sql_path(sql, []), do: sql
 
-  defp restore_dust_paths(sql, dust_paths) do
-    0..(length(dust_paths) - 1)
+  defp restore_maxo_sql_path(sql, maxo_sql_path) do
+    0..(length(maxo_sql_path) - 1)
     |> Enum.reduce(sql, fn index, sql ->
       search_string = "[#{index}]"
-      replace_string = Enum.at(dust_paths, index) |> String.slice(1..-2)
+      replace_string = Enum.at(maxo_sql_path, index) |> String.slice(1..-2)
       String.replace(sql, search_string, replace_string)
     end)
   end

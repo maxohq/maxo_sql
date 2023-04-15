@@ -863,7 +863,7 @@ defmodule MaxoSqlTest do
     schema = %{
       organizations: %{
         addresses: %{
-          foreign_key: "sql dust.is.cool"
+          foreign_key: "maxo sql.is.cool"
         }
       },
       addresses: %{
@@ -876,7 +876,7 @@ defmodule MaxoSqlTest do
        SELECT `u`.`id`
        FROM `users` `u`
        LEFT JOIN `organizations` `organization` ON `organization`.`id` = `u`.`organization_id`
-       LEFT JOIN `some address.table` `organization.addresses` ON `organization.addresses`.`sql dust.is.cool` = `organization`.`id`
+       LEFT JOIN `some address.table` `organization.addresses` ON `organization.addresses`.`maxo sql.is.cool` = `organization`.`id`
        WHERE (`organization.addresses`.`street` LIKE '%Broad%')
        GROUP BY `u`.`id`
        """, []} <- MaxoSql.from("users", options, schema)
