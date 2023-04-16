@@ -1,9 +1,6 @@
 defmodule MyRepo do
   use GenServer
-  alias MaxoSql.Repo.Registry, as: RepoReg
-  alias MaxoSql.Driver.Psql
-  alias MaxoSql.Driver.Mysql
-  alias MaxoSql.Driver.Sqlite
+  alias MaxoSql.DriverMapper
 
   def start_link(opts) do
     GenServer.start_link(__MODULE__, opts, name: __MODULE__)
@@ -13,16 +10,14 @@ defmodule MyRepo do
   def init(opts) do
     state = %{opts: opts}
     connect_if_possible(state)
-    # {:ok, state, {:continue, :connect_if_possible}}
     {:ok, state}
   end
 
   def connect(url) do
     params = MaxoSql.Util.url_to_params(url)
     db_type = Keyword.get(params, :type)
-
-    driver = get_driver(db_type)
-    conn_pid = assert_conn!(driver.start(url), url)
+    driver = DriverMapper.get_driver(db_type)
+    conn_pid = assert_conn!(driver.start(url), "COULD NOT CONNECT TO #{url}")
     my_pid = Process.whereis(__MODULE__)
 
     meta = %{
@@ -32,7 +27,7 @@ defmodule MyRepo do
     }
 
     if my_pid do
-      RepoReg.associate(my_pid, __MODULE__, meta)
+      MaxoSql.Repo.Registry.associate(my_pid, __MODULE__, meta)
     end
   end
 
@@ -47,15 +42,10 @@ defmodule MyRepo do
     driver.query!(conn_pid, sql, opts)
   end
 
-  def get_driver(:psql), do: Psql
-  def get_driver(:mysql), do: Mysql
-  def get_driver(:sqlite), do: Sqlite
-  def get_driver(type), do: raise("NOT SUPPORTED DRIVER #{type}!")
-
-  def assert_conn!(res, url) do
+  def assert_conn!(res, msg) do
     case res do
       {:ok, pid} -> pid
-      _ -> raise("COULD NOT CONNECT TO #{url}")
+      _ -> raise(msg)
     end
   end
 

@@ -8,6 +8,8 @@ defmodule MaxoSql.Util do
     "mysql" => :mysql,
     "file" => :sqlite
   }
+  alias MaxoSql.DriverMapper
+
   def url_to_params(url) do
     uri = URI.parse(url)
 
@@ -20,8 +22,7 @@ defmodule MaxoSql.Util do
     hostname = uri.host
     database = String.replace_leading(uri.path, "/", "")
     port = uri.port
-    type = Map.get(@db_types, uri.scheme)
-
+    type = DriverMapper.get_type_for_scheme(uri.scheme)
     query_opts = parse_uri_query(uri)
 
     url_opts = [

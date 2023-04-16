@@ -29,7 +29,7 @@ MyRepo.query!("select * from comments")
 import MaxoSql.Query
 q = from(:comments) |> select(["id", "name"]) |> where(["id = ? or id = ?", 1, 2])
 
-q = from(:comments) |> count("id")
+q = from(:comments) |> select("count(id)")
 MyRepo.run(q)
 
 from("comments") |> select("count(id)") |> MyRepo.run()
