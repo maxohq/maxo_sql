@@ -88,7 +88,8 @@ defmodule MaxoSql.QueryTest do
       |> where(["category_id = ?", 1])
 
     auto_assert(
-      %MaxoSql{where: [["company.name LIKE ?", "%Engel%"], ["category_id = ?", 1]]} <- query
+      %MaxoSql{where: [["company.name LIKE ?", "%Engel%"], ["category_id = ?", 1]]} <-
+        query
     )
   end
 
@@ -282,7 +283,8 @@ defmodule MaxoSql.QueryTest do
       })
 
     auto_assert(
-      %MaxoSql{schema: %{users: %{skills: %{cardinality: :has_and_belongs_to_many}}}} <- query
+      %MaxoSql{schema: %{users: %{skills: %{cardinality: :has_and_belongs_to_many}}}} <-
+        query
     )
   end
 
@@ -310,7 +312,9 @@ defmodule MaxoSql.QueryTest do
       %MaxoSql{
         schema: %{
           relations: %{table_name: "users"},
-          users: %{skills: %{cardinality: :has_and_belongs_to_many, primary_key: "identifier"}}
+          users: %{
+            skills: %{cardinality: :has_and_belongs_to_many, primary_key: "identifier"}
+          }
         }
       } <- query
     )

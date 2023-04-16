@@ -6,7 +6,7 @@ defmodule MaxoSql.RegistyTest do
     {:ok, pid} = MaxoSql.Driver.Psql.start()
     MaxoSql.Repo.Registry.associate(pid, PsqlRepo, PsqlRepo)
     auto_assert([PsqlRepo] <- MaxoSql.Repo.Registry.all_running())
-    auto_assert(^pid when is_pid(pid) <- MaxoSql.Repo.Registry.mylookup(PsqlRepo))
+    auto_assert({pid, PsqlRepo} when is_pid(pid) <- MaxoSql.Repo.Registry.mylookup(PsqlRepo))
 
     GenServer.stop(pid)
 
