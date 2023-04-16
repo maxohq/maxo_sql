@@ -71,13 +71,6 @@ defmodule MyRepo do
     MaxoSql.Repo.Registry.mylookup(MyRepo) || raise "Repo not started / configured"
   end
 
-  @impl true
-  def handle_continue(:connect_if_possible, state) do
-    connect_if_possible(state)
-
-    {:noreply, state}
-  end
-
   def connect_if_possible(state) do
     cond do
       is_binary(state.opts) -> connect(state.opts)
