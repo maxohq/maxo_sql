@@ -3,7 +3,8 @@ defmodule MyRepo do
   alias MaxoSql.DriverMapper
 
   def start_link(opts) do
-    GenServer.start_link(__MODULE__, opts, name: __MODULE__)
+    {name, opts} = Keyword.pop(opts, :name, __MODULE__)
+    GenServer.start_link(__MODULE__, opts, name: name)
   end
 
   @impl true
@@ -31,7 +32,7 @@ defmodule MyRepo do
     end
   end
 
-  def run(%MaxoSql{} = query) do
+  def all(%MaxoSql{} = query) do
     {sql, opts} = MaxoSql.Query.to_sql(query)
     query!(sql, opts)
   end
@@ -62,8 +63,10 @@ defmodule MyRepo do
   end
 
   def connect_if_possible(state) do
+    url = Keyword.get(state.opts, :url)
+
     cond do
-      is_binary(state.opts) -> connect(state.opts)
+      is_binary(url) -> connect(url)
       true -> :ok
     end
   end
