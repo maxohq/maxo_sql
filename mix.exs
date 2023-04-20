@@ -71,7 +71,7 @@ defmodule MaxoSql.MixProject do
       {:dialyxir, "~> 1.3", only: :dev, runtime: false},
       {:benchee, "~> 1.1", only: :dev, runtime: false},
       {:ex_doc, "~> 0.29", only: :dev, runtime: false},
-      {:maxo_test_iex, "~> 0.1.5", only: [:test]},
+      {:maxo_test_iex, "~> 0.1.6", only: [:test]},
       # {:maxo_test_iex, path: "/Users/roman/Desktop/EXPERIMENTS/maxo_test_iex", only: [:test]},
       {:mneme, "0.3.0", only: [:test]}
     ]
