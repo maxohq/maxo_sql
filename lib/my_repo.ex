@@ -32,6 +32,14 @@ defmodule MyRepo do
     end
   end
 
+  def set_name(name) do
+    Process.put({:maxo_sql, :repo}, name)
+  end
+
+  def get_name do
+    Process.get({:maxo_sql, :repo}, __MODULE__)
+  end
+
   def all(%MaxoSql{} = query) do
     {sql, opts} = MaxoSql.Query.to_sql(query)
     query!(sql, opts)
@@ -59,7 +67,8 @@ defmodule MyRepo do
   end
 
   def dynamic_lookup do
-    MaxoSql.Repo.Registry.mylookup(MyRepo) || raise "Repo not started / configured"
+    pid_or_name = get_name()
+    MaxoSql.Repo.Registry.mylookup(pid_or_name) || raise "Repo not started / configured"
   end
 
   def connect_if_possible(state) do

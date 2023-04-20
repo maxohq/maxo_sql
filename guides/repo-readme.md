@@ -3,7 +3,7 @@ defmodule MyRepo do
   use MaxoSql.Repo
 end
 
-MyRepo.run(query)
+MyRepo.all(query)
 MyRepo.stop()
 MyRepo.stop()
 
@@ -30,7 +30,7 @@ import MaxoSql.Query
 q = from(:comments) |> select(["id", "name"]) |> where(["id = ? or id = ?", 1, 2])
 
 q = from(:comments) |> select("count(id)")
-MyRepo.run(q)
+MyRepo.all(q)
 
 from("comments") |> select("count(id)") |> MyRepo.run()
 
@@ -46,7 +46,7 @@ MyRepo.query!("select * from comments where id = 1 or id = 2")
 import MaxoSql.Query
 q = from(:comments) |> select(["id", "name"]) |> where(["id = ? or id = ?", 1, 2])
 
-MyRepo.run(q)
+MyRepo.all(q)
 
 from("comments") |> select("count(id)") |> MyRepo.run()
 MyRepo.stop()
